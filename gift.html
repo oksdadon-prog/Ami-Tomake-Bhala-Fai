@@ -13,11 +13,11 @@ body {
   justify-content: center;
   align-items: center;
   font-family: 'Segoe UI', sans-serif;
-  overflow-x: hidden;
   text-align: center;
+  overflow: hidden;
 }
 #tree {
-  font-size: 60px;
+  font-size: 120px; /* Bigger tree */
   opacity: 0;
   transform: scale(0);
   transition: transform 1.5s ease, opacity 1.5s ease, text-shadow 1.5s ease;
@@ -25,25 +25,34 @@ body {
 #tree.grow {
   opacity: 1;
   transform: scale(1);
-  text-shadow: 0 0 10px #33ff33,0 0 20px #33ff33,0 0 30px #33ff33,0 0 40px #33ff33;
+  text-shadow: 0 0 20px #33ff33,0 0 40px #33ff33,0 0 60px #33ff33,0 0 80px #33ff33;
   animation: glow 2s ease-in-out infinite alternate;
 }
 @keyframes glow {
-  0% { text-shadow: 0 0 10px #33ff33,0 0 20px #33ff33,0 0 30px #33ff33,0 0 40px #33ff33; }
-  100% { text-shadow: 0 0 20px #00ff00,0 0 40px #00ff00,0 0 60px #00ff00,0 0 80px #00ff00; }
+  0% { text-shadow: 0 0 20px #33ff33,0 0 40px #33ff33,0 0 60px #33ff33,0 0 80px #33ff33; }
+  100% { text-shadow: 0 0 30px #00ff00,0 0 60px #00ff00,0 0 90px #00ff00,0 0 120px #00ff00; }
 }
 #treeMessage {
   margin-top: 20px;
-  font-size: 18px;
+  font-size: 22px;
   color: #444;
+  font-weight: bold;
 }
 #claimBtn {
-  background: #33cc33; color: white; font-size: 18px; padding: 12px 24px;
-  border-radius: 12px; border: none; cursor: pointer; margin-top: 15px;
+  background: #33cc33; color: white; font-size: 20px; padding: 14px 28px;
+  border-radius: 12px; border: none; cursor: pointer; margin-top: 20px;
   transition: 0.3s all ease;
 }
-#claimBtn:hover {
-  transform: scale(1.1); box-shadow: 0 0 15px #33ff33,0 0 25px #33ff33;
+#claimBtn:hover { transform: scale(1.1); box-shadow: 0 0 15px #33ff33,0 0 25px #33ff33; }
+.sparkle {
+  position: fixed;
+  font-size: 24px;
+  animation: floatUp 3s linear forwards;
+  pointer-events: none;
+}
+@keyframes floatUp {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-300px) rotate(360deg); opacity: 0; }
 }
 </style>
 </head>
@@ -55,7 +64,6 @@ body {
   <button id="claimBtn">Claim Your Pre-Valentine Gift 🎁</button>
 </div>
 
-<!-- Local MP3 -->
 <audio id="song" preload="auto">
   <source src="song.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
@@ -66,13 +74,37 @@ const tree = document.getElementById("tree");
 const song = document.getElementById("song");
 const claimBtn = document.getElementById("claimBtn");
 
+// Grow tree
 setTimeout(() => tree.classList.add("grow"), 500);
 
+// Play local MP3 (works on user interaction)
 song.play().catch(err => console.log("Play blocked:", err));
 
+// Claim gift button opens PDF
 claimBtn.addEventListener("click", () => {
   window.open("https://www.pdffiller.com/s/CZAbrGfjiz", "_blank");
 });
+
+// Floating sparkles around tree
+function createSparkles() {
+  const icons = ["✨","💫","🌟"];
+  const interval = setInterval(() => {
+    const sparkle = document.createElement("div");
+    sparkle.className = "sparkle";
+    sparkle.textContent = icons[Math.floor(Math.random()*icons.length)];
+    // Position around tree randomly
+    const treeRect = tree.getBoundingClientRect();
+    sparkle.style.left = (treeRect.left + Math.random()*treeRect.width) + "px";
+    sparkle.style.top = (treeRect.top + Math.random()*treeRect.height/2) + "px";
+    document.body.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 3000);
+  }, 200);
+  setTimeout(() => clearInterval(interval), 8000); // Stop after 8 seconds
+}
+
+// Start sparkles after tree grows
+setTimeout(createSparkles, 1000);
 </script>
+
 </body>
 </html>
