@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayesha's Pre-Valentine Gift 💖</title>
+<style>
+  body {
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    overflow-x: hidden;
+  }
+
+  .card {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    max-width: 90%;
+  }
+
+  h1 { color: #ff3366; margin-bottom: 15px; }
+  .buttons { margin-top: 25px; }
+  button {
+    padding: 14px 28px;
+    font-size: 18px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    margin: 10px;
+    transition: transform 0.2s ease;
+  }
+  #yesBtn { background: #ff3366; color: white; }
+  #yesBtn:hover { transform: scale(1.1); }
+  #noBtn { background: #e0e0e0; position: relative; }
+
+  #message, #gift { margin-top: 20px; font-size: 18px; color: #444; }
+
+  .heart { position: fixed; font-size: 24px; animation: floatUp 3s linear forwards; }
+
+  #tree {
+    font-size: 60px;
+    margin: 20px auto 0;
+    opacity: 0;
+    transform: scale(0);
+    display: inline-block;
+    transition: transform 1.5s ease, opacity 1.5s ease, text-shadow 1.5s ease;
+  }
+  #tree.grow {
+    opacity: 1;
+    transform: scale(1);
+    text-shadow: 0 0 10px #33ff33,0 0 20px #33ff33,0 0 30px #33ff33,0 0 40px #33ff33;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-200px); opacity: 0; }
+  }
+  @keyframes glow {
+    0% { text-shadow: 0 0 10px #33ff33,0 0 20px #33ff33,0 0 30px #33ff33,0 0 40px #33ff33; }
+    100% { text-shadow: 0 0 20px #00ff00,0 0 40px #00ff00,0 0 60px #00ff00,0 0 80px #00ff00; }
+  }
+
+  #claimBtn {
+    background: #33cc33; color: white; font-size: 18px; padding: 12px 24px;
+    border-radius: 12px; border: none; cursor: pointer; margin-top: 15px;
+    transition: 0.3s all ease;
+  }
+  #claimBtn:hover {
+    transform: scale(1.1); box-shadow: 0 0 15px #33ff33,0 0 25px #33ff33;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1 id="question">Ayesha, will you be my Valentine, meri jaan? 💕</h1>
+
+  <div class="buttons">
+    <button id="yesBtn">Yes 💖</button>
+    <button id="noBtn">No 🙃</button>
+  </div>
+
+  <p id="message"></p>
+
+  <!-- Glowing tree -->
+  <div id="tree">🌳</div>
+
+  <!-- Claim Gift -->
+  <p id="gift" style="display:none;">
+    <button id="claimBtn">Claim Your Pre-Valentine Gift 🎁</button>
+  </p>
+</div>
+
+<!-- Local MP3 -->
+<audio id="song" preload="auto" style="display:none">
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const message = document.getElementById("message");
+const question = document.getElementById("question");
+const tree = document.getElementById("tree");
+const gift = document.getElementById("gift");
+const claimBtn = document.getElementById("claimBtn");
+const song = document.getElementById("song");
+
+const noMessages = [
+  "Ayesha please na koiro 🥺",
+  "Hey… eto taratari no bolo na 😔",
+  "Just think once, meri jaan 💭💞",
+  "Mon ta ektu hurt hoye gelo 💔",
+  "Ayeshaaa 😭 ekbar yes bolo na",
+  "You’re too cute to say no, meri jaan 🥹",
+  "Ami ektu shy hoye gesi 🙈",
+  "Please meri jaan, last chance 😤💘",
+  "No button ta honestly sirf dikhane ke liye 😏"
+];
+
+let noCount = 0;
+
+// NO button dodge
+function dodgeNo() {
+  const x = Math.random() * (window.innerWidth - 120);
+  const y = Math.random() * (window.innerHeight - 120);
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+
+  message.textContent = noMessages[Math.min(noCount, noMessages.length-1)];
+  noCount++;
+  yesBtn.style.transform = `scale(${1 + noCount * 0.05})`;
+}
+noBtn.addEventListener("mouseover", dodgeNo);
+noBtn.addEventListener("touchstart", dodgeNo);
+
+// YES button
+yesBtn.addEventListener("click", () => {
+  question.textContent = "YAYYY AYESHA 💖🥰";
+  message.innerHTML = "I knew it 💞 meri jaan 😌<br>So… you’re officially my Valentine now 🌹✨";
+  noBtn.style.display = "none";
+
+  // Hearts
+  createHearts();
+
+  // Grow tree
+  setTimeout(() => tree.classList.add("grow"), 500);
+
+  // Show Claim Gift button
+  gift.style.display = "block";
+
+  // Play local MP3
+  song.play().catch(err => console.log("Play blocked:", err));
+});
+
+// Hearts animation
+function createHearts() {
+  const icons = ["💗","💖","🌸","✨"];
+  const interval = setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.textContent = icons[Math.floor(Math.random() * icons.length)];
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.top = "100vh";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 3000);
+  }, 200);
+  setTimeout(() => clearInterval(interval), 4000);
+}
+
+// Claim Gift button
+claimBtn.addEventListener("click", () => {
+  window.open("https://www.pdffiller.com/s/CZAbrGfjiz", "_blank");
+});
+</script>
+
+</body>
+</html>
+
+
+  
