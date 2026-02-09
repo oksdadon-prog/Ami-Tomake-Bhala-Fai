@@ -40,7 +40,7 @@
   #yesBtn:hover { transform: scale(1.1); }
   #noBtn { background: #e0e0e0; position: relative; }
 
-  #message, #gift { margin-top: 20px; font-size: 18px; color: #444; }
+  #message, #gift, #treeMessage { margin-top: 20px; font-size: 18px; color: #444; }
 
   .heart { position: fixed; font-size: 24px; animation: floatUp 3s linear forwards; }
 
@@ -76,7 +76,6 @@
   #claimBtn:hover {
     transform: scale(1.1); box-shadow: 0 0 15px #33ff33,0 0 25px #33ff33;
   }
-
 </style>
 </head>
 <body>
@@ -93,6 +92,7 @@
 
   <!-- Glowing tree -->
   <div id="tree">🌳</div>
+  <p id="treeMessage" style="display:none;">A gift that will live as long as my love for you 💞</p>
 
   <!-- Claim Gift -->
   <p id="gift" style="display:none;">
@@ -101,8 +101,9 @@
 </div>
 
 <!-- Local MP3 -->
-<audio id="song" preload="auto" style="display:none">
+<audio id="song" preload="auto">
   <source src="song.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
 </audio>
 
 <script>
@@ -111,6 +112,7 @@ const noBtn = document.getElementById("noBtn");
 const message = document.getElementById("message");
 const question = document.getElementById("question");
 const tree = document.getElementById("tree");
+const treeMessage = document.getElementById("treeMessage");
 const gift = document.getElementById("gift");
 const claimBtn = document.getElementById("claimBtn");
 const song = document.getElementById("song");
@@ -145,7 +147,7 @@ noBtn.addEventListener("mouseover", dodgeNo);
 noBtn.addEventListener("touchstart", dodgeNo);
 
 // YES button
-yesBtn.addEventListener("click", () => {
+yesBtn.addEventListener("click", async () => {
   question.textContent = "YAYYY AYESHA 💖🥰";
   message.innerHTML = "I knew it 💞 meri jaan 😌<br>So… you’re officially my Valentine now 🌹✨";
   noBtn.style.display = "none";
@@ -155,12 +157,14 @@ yesBtn.addEventListener("click", () => {
 
   // Grow tree
   setTimeout(() => tree.classList.add("grow"), 500);
+  setTimeout(() => treeMessage.style.display = "block", 1000);
 
   // Show Claim Gift button
   gift.style.display = "block";
 
   // Play local MP3
-  song.play().catch(err => console.log("Play blocked:", err));
+  try { await song.play(); } 
+  catch(err) { console.log("Play blocked:", err); }
 });
 
 // Hearts animation
@@ -187,5 +191,3 @@ claimBtn.addEventListener("click", () => {
 </body>
 </html>
 
-
-  
