@@ -3,117 +3,192 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ayesha's Pre-Valentine Gift 💖</title>
+<title>Ayesha – Pre Valentine Gift 💖</title>
+
 <style>
 body {
   min-height: 100vh;
   margin: 0;
-  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  background: radial-gradient(circle at top, #1b2735, #090a0f);
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: 'Segoe UI', sans-serif;
   text-align: center;
   overflow: hidden;
+  color: white;
 }
+
+/* Stars */
+.star {
+  position: fixed;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: twinkle 3s infinite ease-in-out alternate;
+}
+@keyframes twinkle {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+/* Tree */
 #tree {
-  font-size: 120px; /* Bigger tree */
+  font-size: 130px;
   opacity: 0;
   transform: scale(0);
-  transition: transform 1.5s ease, opacity 1.5s ease, text-shadow 1.5s ease;
+  transition: all 1.8s ease;
 }
 #tree.grow {
   opacity: 1;
   transform: scale(1);
-  text-shadow: 0 0 20px #33ff33,0 0 40px #33ff33,0 0 60px #33ff33,0 0 80px #33ff33;
-  animation: glow 2s ease-in-out infinite alternate;
+  text-shadow:
+    0 0 30px #33ff33,
+    0 0 60px #33ff33,
+    0 0 90px #33ff33;
+  animation: glow 2s infinite alternate;
 }
 @keyframes glow {
-  0% { text-shadow: 0 0 20px #33ff33,0 0 40px #33ff33,0 0 60px #33ff33,0 0 80px #33ff33; }
-  100% { text-shadow: 0 0 30px #00ff00,0 0 60px #00ff00,0 0 90px #00ff00,0 0 120px #00ff00; }
+  from { text-shadow: 0 0 30px #33ff33; }
+  to { text-shadow: 0 0 80px #00ff00; }
 }
-#treeMessage {
-  margin-top: 20px;
-  font-size: 22px;
-  color: #444;
+
+/* Name */
+#name {
+  font-size: 36px;
+  margin-top: 10px;
   font-weight: bold;
+  color: #ffb6c1;
+  text-shadow: 0 0 15px #ff69b4, 0 0 30px #ff69b4;
 }
+
+/* Message */
+#message {
+  margin-top: 20px;
+  font-size: 20px;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+/* Button */
 #claimBtn {
-  background: #33cc33; color: white; font-size: 20px; padding: 14px 28px;
-  border-radius: 12px; border: none; cursor: pointer; margin-top: 20px;
-  transition: 0.3s all ease;
+  background: #ff3366;
+  color: white;
+  font-size: 18px;
+  padding: 14px 28px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  margin-top: 25px;
+  transition: 0.3s ease;
 }
-#claimBtn:hover { transform: scale(1.1); box-shadow: 0 0 15px #33ff33,0 0 25px #33ff33; }
+#claimBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #ff69b4;
+}
+
+/* Sparkles */
 .sparkle {
   position: fixed;
-  font-size: 24px;
-  animation: floatUp 3s linear forwards;
+  font-size: 22px;
+  animation: floatUp 4s linear forwards;
   pointer-events: none;
 }
 @keyframes floatUp {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-300px) rotate(360deg); opacity: 0; }
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-350px) rotate(360deg); opacity: 0; }
 }
+
 /* Overlay */
 #overlay {
   position: fixed;
-  top:0; left:0; width:100%; height:100%;
-  background: #00000080;
-  display:flex; justify-content:center; align-items:center;
-  color:white; font-size:24px; cursor:pointer; text-align:center;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  text-align: center;
+  cursor: pointer;
+  padding: 20px;
 }
 </style>
 </head>
+
 <body>
 
 <div>
   <div id="tree">🌳</div>
-  <p id="treeMessage">Ekta gift, jeita tomar proti amar love-er moto chirdin bachbo 💞</p>
-  <button id="claimBtn">Claim Your Pre-Valentine Gift 🎁</button>
+  <div id="name">AYESHA 💖</div>
+
+  <div id="message">
+    Ek gift jo meri mohabbat ki tarah<br>
+    kabhi khatam nahi hoga.<br>
+    Jab tak yeh darakht zinda hai,<br>
+    mera pyaar bhi zinda rahega 💞
+  </div>
+
+  <button id="claimBtn">
+    Claim Your Pre-Valentine Gift 🎁
+  </button>
 </div>
 
-<!-- Local MP3 -->
 <audio id="song" preload="auto">
   <source src="song.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
 </audio>
 
-<!-- Overlay for mobile -->
-<div id="overlay">Tap to See Your Surprise 💖</div>
+<div id="overlay">
+  Tap to See Your Surprise ✨
+</div>
 
 <script>
 const tree = document.getElementById("tree");
 const song = document.getElementById("song");
-const claimBtn = document.getElementById("claimBtn");
 const overlay = document.getElementById("overlay");
+const claimBtn = document.getElementById("claimBtn");
 
-// Function to start animation + music
+/* Stars */
+for (let i = 0; i < 60; i++) {
+  const star = document.createElement("div");
+  star.className = "star";
+  star.style.width = star.style.height = Math.random()*2 + 1 + "px";
+  star.style.left = Math.random()*100 + "vw";
+  star.style.top = Math.random()*100 + "vh";
+  document.body.appendChild(star);
+}
+
+/* Fade-in music */
+function fadeInMusic() {
+  song.volume = 0;
+  song.play().catch(()=>{});
+  let v = 0;
+  const fade = setInterval(() => {
+    v += 0.05;
+    song.volume = Math.min(v, 1);
+    if (v >= 1) clearInterval(fade);
+  }, 200);
+}
+
 function startSurprise() {
   overlay.style.display = "none";
   tree.classList.add("grow");
+  fadeInMusic();
 
-  // Play music
-  song.play().catch(err => console.log("Play blocked:", err));
-
-  // Sparkles animation
   const icons = ["✨","💫","🌟"];
-  const interval = setInterval(() => {
-    const sparkle = document.createElement("div");
-    sparkle.className = "sparkle";
-    sparkle.textContent = icons[Math.floor(Math.random()*icons.length)];
-    const treeRect = tree.getBoundingClientRect();
-    sparkle.style.left = (treeRect.left + Math.random()*treeRect.width) + "px";
-    sparkle.style.top = (treeRect.top + Math.random()*treeRect.height/2) + "px";
-    document.body.appendChild(sparkle);
-    setTimeout(() => sparkle.remove(), 3000);
-  }, 200);
-  setTimeout(() => clearInterval(interval), 10000); // Sparkles for 10s
+  const sparkleInterval = setInterval(() => {
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.textContent = icons[Math.floor(Math.random()*icons.length)];
+    const r = tree.getBoundingClientRect();
+    s.style.left = r.left + Math.random()*r.width + "px";
+    s.style.top = r.top + Math.random()*r.height/2 + "px";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 4000);
+  }, 250);
 }
 
-// Overlay tap triggers surprise
 overlay.addEventListener("click", startSurprise);
 
-// Claim gift button
 claimBtn.addEventListener("click", () => {
   window.open("https://www.pdffiller.com/s/CZAbrGfjiz", "_blank");
 });
@@ -121,4 +196,3 @@ claimBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
