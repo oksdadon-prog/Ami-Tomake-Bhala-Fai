@@ -3,119 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ayesha Valentine 💖</title>
+<title>For Ayesha 💖</title>
+
 <style>
 body {
-  min-height: 100vh;
   margin: 0;
-  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1b2735, #090a0f);
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: 'Segoe UI', sans-serif;
-  overflow-x: hidden;
-}
-.card {
-  background: white;
-  padding: 40px;
-  border-radius: 25px;
+  color: white;
   text-align: center;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-  max-width: 90%;
+  overflow: hidden;
 }
-h1 { color: #ff3366; margin-bottom: 15px; }
-.buttons { margin-top: 25px; }
-button {
-  padding: 14px 28px;
+
+/* Hearts */
+.heart {
+  position: fixed;
   font-size: 18px;
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-  margin: 10px;
-  transition: transform 0.2s ease;
+  animation: floatUp 6s linear infinite;
+  opacity: 0.8;
 }
-#yesBtn { background: #ff3366; color: white; }
-#yesBtn:hover { transform: scale(1.1); }
-#noBtn { background: #e0e0e0; position: relative; }
-#message { margin-top: 20px; font-size: 18px; color: #444; }
-.heart { position: fixed; font-size: 24px; animation: floatUp 3s linear forwards; }
 @keyframes floatUp {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-200px); opacity: 0; }
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* Card */
+#card {
+  background: rgba(255,255,255,0.1);
+  padding: 30px 25px;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(255,105,180,0.3);
+  max-width: 320px;
+}
+
+h1 {
+  font-size: 26px;
+  color: #ffb6c1;
+  text-shadow: 0 0 10px #ff69b4;
+}
+
+p {
+  font-size: 18px;
+  margin-top: 15px;
+  line-height: 1.5;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px 26px;
+  font-size: 18px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+#yesBtn {
+  background: #ff3366;
+  color: white;
+}
+#yesBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #ff69b4;
+}
+
+#noBtn {
+  background: transparent;
+  color: #ffb6c1;
+  border: 1px solid #ffb6c1;
+  margin-left: 10px;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 20px;
 }
 </style>
 </head>
+
 <body>
 
-<div class="card">
-  <h1 id="question">Ayesha, will you be my Valentine, meri jaan? 💕</h1>
-  <div class="buttons">
-    <button id="yesBtn">Yes 💖</button>
-    <button id="noBtn">No 🙃</button>
-  </div>
-  <p id="message"></p>
+<div id="card">
+  <h1>Ayesha 💖</h1>
+
+  <p>
+    Tum meri zindagi ka sab se khoobsurat hissa ho.<br>
+    Kya tum meri Valentine banogi? 💞
+  </p>
+
+  <button id="yesBtn">YES 💖</button>
+  <button id="noBtn">NO 🙈</button>
+</div>
+
+<audio id="song" preload="auto">
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<div id="overlay">
+  Tap to Begin 💫
 </div>
 
 <script>
+const overlay = document.getElementById("overlay");
+const song = document.getElementById("song");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-const message = document.getElementById("message");
-const question = document.getElementById("question");
 
-const noMessages = [
-  "Ayesha please na koiro 🥺",
-  "Hey… eto taratari no bolo na 😔",
-  "Just think once, meri jaan 💭💞",
-  "Mon ta ektu hurt hoye gelo 💔",
-  "Ayeshaaa 😭 ekbar yes bolo na",
-  "You’re too cute to say no, meri jaan 🥹",
-  "Ami ektu shy hoye gesi 🙈",
-  "Please meri jaan, last chance 😤💘",
-  "No button ta honestly sirf dikhane ke liye 😏"
-];
+/* Floating hearts */
+setInterval(() => {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.textContent = "💖";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.animationDuration = Math.random()*3 + 4 + "s";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 6000);
+}, 400);
 
-let noCount = 0;
-
-function dodgeNo() {
-  const x = Math.random() * (window.innerWidth - 120);
-  const y = Math.random() * (window.innerHeight - 120);
-  noBtn.style.position = "absolute";
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
-
-  message.textContent = noMessages[Math.min(noCount, noMessages.length-1)];
-  noCount++;
-  yesBtn.style.transform = `scale(${1 + noCount * 0.05})`;
-}
-noBtn.addEventListener("mouseover", dodgeNo);
-noBtn.addEventListener("touchstart", dodgeNo);
-
-function createHearts() {
-  const icons = ["💗","💖","🌸","✨"];
-  const interval = setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.textContent = icons[Math.floor(Math.random() * icons.length)];
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.top = "100vh";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 3000);
+/* iPhone-safe music start */
+overlay.addEventListener("click", () => {
+  overlay.style.display = "none";
+  song.volume = 0;
+  song.play().catch(()=>{});
+  let v = 0;
+  const fade = setInterval(() => {
+    v += 0.05;
+    song.volume = Math.min(v, 1);
+    if (v >= 1) clearInterval(fade);
   }, 200);
-  setTimeout(() => clearInterval(interval), 4000);
-}
+});
 
+/* YES → gift page */
 yesBtn.addEventListener("click", () => {
-  question.textContent = "YAYYY AYESHA 💖🥰";
-  message.innerHTML = "I knew it 💞 meri jaan 😌<br>So… you’re officially my Valentine now 🌹✨";
-  noBtn.style.display = "none";
+  window.location.href = "gift.html";
+});
 
-  createHearts();
-
-  // Redirect to gift page after 2 seconds
-  setTimeout(() => {
-    window.location.href = "gift.html";
-  }, 2000);
+/* NO button runs away */
+noBtn.addEventListener("mouseover", () => {
+  noBtn.style.position = "absolute";
+  noBtn.style.left = Math.random()*70 + "vw";
+  noBtn.style.top = Math.random()*70 + "vh";
 });
 </script>
+
 </body>
 </html>
